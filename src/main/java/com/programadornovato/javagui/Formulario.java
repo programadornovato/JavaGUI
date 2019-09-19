@@ -6,6 +6,9 @@
 package com.programadornovato.javagui;
 
 import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  *
@@ -13,6 +16,23 @@ import javax.swing.JOptionPane;
  */
 public class Formulario extends javax.swing.JFrame {
 
+    Connection con;
+    String driver="com.mysql.cj.jdbc.Driver";
+    String user="eugenio";
+    String pass="123456";
+    String url="jdbc:mysql://localhost:3306/empleados?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    public void conectar(){
+        con=null;
+        try {
+            Class.forName(driver);
+            con=(Connection) DriverManager.getConnection(url,user,pass);
+            if(con!=null){
+                estadoCon.setText("Conexion exitosa");
+            }
+        } catch (Exception e) {
+            estadoCon.setText("Conexion no exitosa "+e);
+        }
+    }
     /**
      * Creates new form Formulario
      */
@@ -29,19 +49,15 @@ public class Formulario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        nombre = new javax.swing.JTextField();
-        botonQueSaluda = new javax.swing.JButton();
-        saludo = new javax.swing.JLabel();
+        estadoCon = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Humano!!! ingresa tu nombre en la caja de abajo");
-
-        botonQueSaluda.setText("Humano haz click aqui");
-        botonQueSaluda.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setText("Probar conexion");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonQueSaludaActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -50,41 +66,28 @@ public class Formulario extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(saludo, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(botonQueSaluda)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(estadoCon, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
                 .addGap(27, 27, 27)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(botonQueSaluda)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addComponent(saludo, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(135, 135, 135))
+                .addComponent(estadoCon, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(208, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void botonQueSaludaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonQueSaludaActionPerformed
-        if( nombre.getText().isEmpty()==false ){
-            saludo.setText("Hola "+nombre.getText());
-        }else{
-            JOptionPane.showMessageDialog(null,"Humano estupido ingresa un nombre");
-        }
-
-    }//GEN-LAST:event_botonQueSaludaActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        conectar();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -122,9 +125,7 @@ public class Formulario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton botonQueSaluda;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField nombre;
-    private javax.swing.JLabel saludo;
+    private javax.swing.JLabel estadoCon;
+    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }
