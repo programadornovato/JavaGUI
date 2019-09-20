@@ -49,9 +49,41 @@ public class Formulario extends javax.swing.JFrame {
             
         } catch (Exception e) {
         }
-        
-        
-        
+    }
+    protected void buscarTabla(String nombre,String puesto,String edad){
+        modelo.setRowCount(0);
+        String datos[]=new String[4];
+        String where=" where 1=1 ";
+        //Si el nombre no esta vacio
+        if(nombre.isEmpty()==false){
+            where=where+" and nombre='"+nombre+"' ";
+        }
+        //Si el puesto no esta vacio
+        if(puesto.isEmpty()==false){
+            where=where+" and puesto='"+puesto+"' ";
+        }
+        //Si la edad no esta vacio
+        if(edad.isEmpty()==false){
+            where=where+" and edad='"+edad+"' ";
+        }
+        String query="select * from empleados "+where+" ;";
+        debugQuery.setText(query);
+        ResultSet rs;
+        try {
+            ejecutor=con.createStatement();
+            ejecutor.setQueryTimeout(20);
+            rs=ejecutor.executeQuery(query);
+            while(rs.next()==true){
+                datos[0]=rs.getString("id");
+                datos[1]=rs.getString("nombre");
+                datos[2]=rs.getString("puesto");
+                datos[3]=rs.getString("edad");
+                modelo.addRow(datos);
+            }
+            tablaEmpleados.setModel(modelo);
+            
+        } catch (Exception e) {
+        }
     }
     public void conectar(){
         con=null;
@@ -86,6 +118,15 @@ public class Formulario extends javax.swing.JFrame {
         llenarTabla = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaEmpleados = new javax.swing.JTable();
+        porNombre = new javax.swing.JTextField();
+        porPuesto = new javax.swing.JTextField();
+        porEdad = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        btnBuscar = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        debugQuery = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -106,6 +147,23 @@ public class Formulario extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tablaEmpleados);
 
+        jLabel1.setText("Por nombre");
+
+        jLabel2.setText("Por puesto");
+
+        jLabel3.setText("Por edad");
+
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        debugQuery.setColumns(20);
+        debugQuery.setRows(5);
+        jScrollPane2.setViewportView(debugQuery);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -117,7 +175,24 @@ public class Formulario extends javax.swing.JFrame {
                         .addComponent(llenarTabla)
                         .addGap(18, 18, 18)
                         .addComponent(estadoCon, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1)
+                                .addComponent(porNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2)
+                                .addComponent(porPuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel3)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(porEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnBuscar))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)))
                 .addContainerGap(130, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -127,9 +202,22 @@ public class Formulario extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(estadoCon, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(llenarTabla))
-                .addGap(28, 28, 28)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(porNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(porPuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(porEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscar))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(89, 89, 89))
         );
 
         pack();
@@ -139,6 +227,10 @@ public class Formulario extends javax.swing.JFrame {
         //conectar();
         cargaTabla();
     }//GEN-LAST:event_llenarTablaActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        buscarTabla(porNombre.getText(),porPuesto.getText(),porEdad.getText());
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -176,9 +268,18 @@ public class Formulario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JTextArea debugQuery;
     private javax.swing.JLabel estadoCon;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton llenarTabla;
+    private javax.swing.JTextField porEdad;
+    private javax.swing.JTextField porNombre;
+    private javax.swing.JTextField porPuesto;
     private javax.swing.JTable tablaEmpleados;
     // End of variables declaration//GEN-END:variables
 }
