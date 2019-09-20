@@ -8,19 +8,51 @@ package com.programadornovato.javagui;
 import javax.swing.JOptionPane;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author eugenio
  */
 public class Formulario extends javax.swing.JFrame {
-
+    DefaultTableModel modelo=new DefaultTableModel();
+    Statement ejecutor=null;
     Connection con;
     String driver="com.mysql.cj.jdbc.Driver";
     String user="eugenio";
     String pass="123456";
     String url="jdbc:mysql://localhost:3306/empleados?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    protected void cargaTabla(){
+        modelo.addColumn("id");
+        modelo.addColumn("nombre");
+        modelo.addColumn("puesto");
+        modelo.addColumn("edad");
+        modelo.setRowCount(0);
+        String datos[]=new String[4];
+        String query="select * from empleados;";
+        ResultSet rs;
+        try {
+            ejecutor=con.createStatement();
+            ejecutor.setQueryTimeout(20);
+            rs=ejecutor.executeQuery(query);
+            while(rs.next()==true){
+                datos[0]=rs.getString("id");
+                datos[1]=rs.getString("nombre");
+                datos[2]=rs.getString("puesto");
+                datos[3]=rs.getString("edad");
+                modelo.addRow(datos);
+            }
+            tablaEmpleados.setModel(modelo);
+            
+        } catch (Exception e) {
+        }
+        
+        
+        
+    }
     public void conectar(){
         con=null;
         try {
@@ -38,6 +70,7 @@ public class Formulario extends javax.swing.JFrame {
      */
     public Formulario() {
         initComponents();
+        conectar();
     }
 
     /**
@@ -50,16 +83,28 @@ public class Formulario extends javax.swing.JFrame {
     private void initComponents() {
 
         estadoCon = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        llenarTabla = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablaEmpleados = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Probar conexion");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        llenarTabla.setText("Llenar tabla");
+        llenarTabla.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                llenarTablaActionPerformed(evt);
             }
         });
+
+        tablaEmpleados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null}
+            },
+            new String [] {
+                "id", "nombre", "puesto", "edad"
+            }
+        ));
+        jScrollPane1.setViewportView(tablaEmpleados);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -68,26 +113,32 @@ public class Formulario extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(estadoCon, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addContainerGap(43, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(llenarTabla)
+                        .addGap(18, 18, 18)
+                        .addComponent(estadoCon, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(130, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
-                .addGap(27, 27, 27)
-                .addComponent(estadoCon, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(208, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(estadoCon, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(llenarTabla))
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(77, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        conectar();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void llenarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_llenarTablaActionPerformed
+        //conectar();
+        cargaTabla();
+    }//GEN-LAST:event_llenarTablaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -126,6 +177,8 @@ public class Formulario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel estadoCon;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton llenarTabla;
+    private javax.swing.JTable tablaEmpleados;
     // End of variables declaration//GEN-END:variables
 }
