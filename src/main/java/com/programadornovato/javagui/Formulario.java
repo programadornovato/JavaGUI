@@ -135,6 +135,7 @@ public class Formulario extends javax.swing.JFrame {
         txtEdad = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -146,6 +147,11 @@ public class Formulario extends javax.swing.JFrame {
                 "id", "nombre", "puesto", "edad"
             }
         ));
+        tablaEmpleados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaEmpleadosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaEmpleados);
 
         jLabel1.setText("Por nombre");
@@ -175,6 +181,13 @@ public class Formulario extends javax.swing.JFrame {
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarActionPerformed(evt);
+            }
+        });
+
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
             }
         });
 
@@ -214,7 +227,10 @@ public class Formulario extends javax.swing.JFrame {
                         .addComponent(estadoCon, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnAgregar)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnEditar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnAgregar))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
@@ -247,7 +263,9 @@ public class Formulario extends javax.swing.JFrame {
                     .addComponent(txtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
                 .addGap(18, 18, 18)
-                .addComponent(btnAgregar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAgregar)
+                    .addComponent(btnEditar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -275,6 +293,32 @@ public class Formulario extends javax.swing.JFrame {
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
         agregar();
     }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void tablaEmpleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaEmpleadosMouseClicked
+        
+        int registro=tablaEmpleados.getSelectedRow();
+        txtNombre.setText( tablaEmpleados.getValueAt(registro, 1).toString() );
+        txtPuesto.setText( tablaEmpleados.getValueAt(registro, 2).toString() );
+        txtEdad.setText( tablaEmpleados.getValueAt(registro, 3).toString() );
+        
+    }//GEN-LAST:event_tablaEmpleadosMouseClicked
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        PreparedStatement preparar=null;
+        String query="update empleados set "
+                + "nombre='"+txtNombre.getText()+"', "
+                + "puesto='"+txtPuesto.getText()+"', "
+                + "edad='"+txtEdad.getText()+"' "
+                + "where id='"+tablaEmpleados.getValueAt(tablaEmpleados.getSelectedRow(),0)+"'; ";
+        try {
+            preparar=con.prepareStatement(query);
+            preparar.executeUpdate();
+            cargaTabla();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     protected void agregar(){
         String mensajeError="";
@@ -345,6 +389,7 @@ public class Formulario extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEditar;
     private javax.swing.JTextArea debugQuery;
     private javax.swing.JLabel estadoCon;
     private javax.swing.JLabel jLabel1;
