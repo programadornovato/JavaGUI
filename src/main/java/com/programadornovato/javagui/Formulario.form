@@ -194,6 +194,9 @@
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tablaEmpleadosMouseClicked"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="tablaEmpleados= new javax.swing.JTable(){&#xa;    public boolean isCellEditable(int row,int col){&#xa;        for(int i=0;i&lt;tablaEmpleados.getRowCount();i++){&#xa;            if(row==i){&#xa;                return false;&#xa;            }&#xa;        }&#xa;        return true;&#xa;    }&#xa;};"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

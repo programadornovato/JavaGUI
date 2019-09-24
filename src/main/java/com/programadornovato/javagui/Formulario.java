@@ -140,6 +140,16 @@ public class Formulario extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        tablaEmpleados= new javax.swing.JTable(){
+            public boolean isCellEditable(int row,int col){
+                for(int i=0;i<tablaEmpleados.getRowCount();i++){
+                    if(row==i){
+                        return false;
+                    }
+                }
+                return true;
+            }
+        };
         tablaEmpleados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null}
@@ -308,13 +318,14 @@ public class Formulario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void tablaEmpleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaEmpleadosMouseClicked
-        
-        int registro=tablaEmpleados.getSelectedRow();
-        txtNombre.setText( tablaEmpleados.getValueAt(registro, 1).toString() );
-        txtPuesto.setText( tablaEmpleados.getValueAt(registro, 2).toString() );
-        txtEdad.setText( tablaEmpleados.getValueAt(registro, 3).toString() );
-        btnBorrar.setEnabled(true);
-        btnEditar.setEnabled(true);
+        if(evt.getClickCount()==2){
+            int registro=tablaEmpleados.getSelectedRow();
+            txtNombre.setText( tablaEmpleados.getValueAt(registro, 1).toString() );
+            txtPuesto.setText( tablaEmpleados.getValueAt(registro, 2).toString() );
+            txtEdad.setText( tablaEmpleados.getValueAt(registro, 3).toString() );
+            btnBorrar.setEnabled(true);
+            btnEditar.setEnabled(true);
+        }
         
     }//GEN-LAST:event_tablaEmpleadosMouseClicked
 
