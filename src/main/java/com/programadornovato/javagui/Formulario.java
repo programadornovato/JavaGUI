@@ -116,6 +116,9 @@ public class Formulario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        menuEditar = new javax.swing.JMenuItem();
+        menuBorrar = new javax.swing.JMenuItem();
         estadoCon = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaEmpleados = new javax.swing.JTable();
@@ -136,7 +139,22 @@ public class Formulario extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
-        btnBorrar = new javax.swing.JButton();
+
+        menuEditar.setText("Editar");
+        menuEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEditarActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(menuEditar);
+
+        menuBorrar.setText("Borrar");
+        menuBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuBorrarActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(menuBorrar);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -158,6 +176,7 @@ public class Formulario extends javax.swing.JFrame {
                 "id", "nombre", "puesto", "edad"
             }
         ));
+        tablaEmpleados.setComponentPopupMenu(jPopupMenu1);
         tablaEmpleados.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tablaEmpleadosMouseClicked(evt);
@@ -203,14 +222,6 @@ public class Formulario extends javax.swing.JFrame {
             }
         });
 
-        btnBorrar.setText("Borrar");
-        btnBorrar.setEnabled(false);
-        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBorrarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -248,8 +259,6 @@ public class Formulario extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnBorrar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnEditar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnAgregar))
@@ -287,8 +296,7 @@ public class Formulario extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar)
-                    .addComponent(btnEditar)
-                    .addComponent(btnBorrar))
+                    .addComponent(btnEditar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -318,14 +326,6 @@ public class Formulario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void tablaEmpleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaEmpleadosMouseClicked
-        if(evt.getClickCount()==2){
-            int registro=tablaEmpleados.getSelectedRow();
-            txtNombre.setText( tablaEmpleados.getValueAt(registro, 1).toString() );
-            txtPuesto.setText( tablaEmpleados.getValueAt(registro, 2).toString() );
-            txtEdad.setText( tablaEmpleados.getValueAt(registro, 3).toString() );
-            btnBorrar.setEnabled(true);
-            btnEditar.setEnabled(true);
-        }
         
     }//GEN-LAST:event_tablaEmpleadosMouseClicked
 
@@ -343,12 +343,19 @@ public class Formulario extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println(e);
         }
-        btnBorrar.setEnabled(false);
         btnEditar.setEnabled(false);
         
     }//GEN-LAST:event_btnEditarActionPerformed
 
-    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+    private void menuEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEditarActionPerformed
+            int registro=tablaEmpleados.getSelectedRow();
+            txtNombre.setText( tablaEmpleados.getValueAt(registro, 1).toString() );
+            txtPuesto.setText( tablaEmpleados.getValueAt(registro, 2).toString() );
+            txtEdad.setText( tablaEmpleados.getValueAt(registro, 3).toString() );
+            btnEditar.setEnabled(true);
+    }//GEN-LAST:event_menuEditarActionPerformed
+
+    private void menuBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuBorrarActionPerformed
         PreparedStatement pre=null;
         String query="delete from empleados "
                 + "where id='"+tablaEmpleados.getValueAt(tablaEmpleados.getSelectedRow(), 0)+"'; ";
@@ -362,10 +369,8 @@ public class Formulario extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println(e);
         }
-        btnBorrar.setEnabled(false);
-        btnEditar.setEnabled(false);
-
-    }//GEN-LAST:event_btnBorrarActionPerformed
+        
+    }//GEN-LAST:event_menuBorrarActionPerformed
 
     protected void agregar(){
         String mensajeError="";
@@ -435,7 +440,6 @@ public class Formulario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
-    private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JTextArea debugQuery;
@@ -446,8 +450,11 @@ public class Formulario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JMenuItem menuBorrar;
+    private javax.swing.JMenuItem menuEditar;
     private javax.swing.JTextField porEdad;
     private javax.swing.JTextField porNombre;
     private javax.swing.JTextField porPuesto;
