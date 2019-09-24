@@ -136,6 +136,7 @@ public class Formulario extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
+        btnBorrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -185,9 +186,18 @@ public class Formulario extends javax.swing.JFrame {
         });
 
         btnEditar.setText("Editar");
+        btnEditar.setEnabled(false);
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditarActionPerformed(evt);
+            }
+        });
+
+        btnBorrar.setText("Borrar");
+        btnBorrar.setEnabled(false);
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
             }
         });
 
@@ -228,6 +238,8 @@ public class Formulario extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnBorrar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnEditar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnAgregar))
@@ -265,7 +277,8 @@ public class Formulario extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar)
-                    .addComponent(btnEditar))
+                    .addComponent(btnEditar)
+                    .addComponent(btnBorrar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -300,6 +313,8 @@ public class Formulario extends javax.swing.JFrame {
         txtNombre.setText( tablaEmpleados.getValueAt(registro, 1).toString() );
         txtPuesto.setText( tablaEmpleados.getValueAt(registro, 2).toString() );
         txtEdad.setText( tablaEmpleados.getValueAt(registro, 3).toString() );
+        btnBorrar.setEnabled(true);
+        btnEditar.setEnabled(true);
         
     }//GEN-LAST:event_tablaEmpleadosMouseClicked
 
@@ -317,8 +332,29 @@ public class Formulario extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println(e);
         }
+        btnBorrar.setEnabled(false);
+        btnEditar.setEnabled(false);
         
     }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        PreparedStatement pre=null;
+        String query="delete from empleados "
+                + "where id='"+tablaEmpleados.getValueAt(tablaEmpleados.getSelectedRow(), 0)+"'; ";
+        try {
+            pre=con.prepareStatement(query);
+            pre.executeUpdate();
+            cargaTabla();
+            txtNombre.setText("");
+            txtPuesto.setText("");
+            txtEdad.setText("");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        btnBorrar.setEnabled(false);
+        btnEditar.setEnabled(false);
+
+    }//GEN-LAST:event_btnBorrarActionPerformed
 
     protected void agregar(){
         String mensajeError="";
@@ -388,6 +424,7 @@ public class Formulario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnBorrar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JTextArea debugQuery;

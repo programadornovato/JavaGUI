@@ -5,3 +5,7 @@ target/test-classes/.netbeans_automatic_build
 *.class
 target/classes/com/programadornovato/javagui/Formulario$1.class
 *.class
+*.class
+*.class
+*.jar
+*.lst
