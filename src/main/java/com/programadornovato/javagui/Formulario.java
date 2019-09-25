@@ -27,6 +27,7 @@ public class Formulario extends javax.swing.JFrame {
     String pass="123456";
     String url="jdbc:mysql://localhost:3306/empleados?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     protected void cargaTabla(){
+        colorTabla c=new colorTabla();
         modelo.setRowCount(0);
         String datos[]=new String[4];
         String query="select * from empleados;";
@@ -43,6 +44,10 @@ public class Formulario extends javax.swing.JFrame {
                 modelo.addRow(datos);
             }
             tablaEmpleados.setModel(modelo);
+            for (int i = 0; i < tablaEmpleados.getColumnCount(); i++) {
+                tablaEmpleados.getColumnModel().getColumn(i).setCellRenderer(c);
+            }
+            
             
         } catch (Exception e) {
         }
@@ -64,7 +69,6 @@ public class Formulario extends javax.swing.JFrame {
             where=where+" and edad='"+edad+"' ";
         }
         String query="select * from empleados "+where+" ;";
-        debugQuery.setText(query);
         ResultSet rs;
         try {
             ejecutor=con.createStatement();
@@ -129,8 +133,6 @@ public class Formulario extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         btnBuscar = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        debugQuery = new javax.swing.JTextArea();
         txtNombre = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -139,6 +141,7 @@ public class Formulario extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
+        barraP = new javax.swing.JProgressBar();
 
         menuEditar.setText("Editar");
         menuEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -197,10 +200,6 @@ public class Formulario extends javax.swing.JFrame {
             }
         });
 
-        debugQuery.setColumns(20);
-        debugQuery.setRows(5);
-        jScrollPane2.setViewportView(debugQuery);
-
         jLabel4.setText("Nombre");
 
         jLabel5.setText("Puesto");
@@ -237,7 +236,6 @@ public class Formulario extends javax.swing.JFrame {
                                 .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(8, 8, 8))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel1)
@@ -257,19 +255,21 @@ public class Formulario extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                         .addComponent(estadoCon, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnEditar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnAgregar))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6))
-                                .addGap(33, 33, 33)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtPuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(btnEditar)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnAgregar))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel5)
+                                        .addComponent(jLabel6))
+                                    .addGap(33, 33, 33)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtPuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(barraP, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -310,8 +310,9 @@ public class Formulario extends javax.swing.JFrame {
                     .addComponent(btnBuscar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(barraP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(73, 73, 73))
         );
 
         pack();
@@ -439,10 +440,10 @@ public class Formulario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JProgressBar barraP;
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEditar;
-    private javax.swing.JTextArea debugQuery;
     private javax.swing.JLabel estadoCon;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -452,7 +453,6 @@ public class Formulario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenuItem menuBorrar;
     private javax.swing.JMenuItem menuEditar;
     private javax.swing.JTextField porEdad;
